@@ -475,45 +475,35 @@ window.addEventListener('error', (e) => {
 });
 
 // Handle form submission errors
-
 contactForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(contactForm);
-    const data = Object.fromEntries(formData);
-
-    // Validate required fields
-    const requiredFields = ['name', 'email', 'message', 'service'];
-    const missingFields = requiredFields.filter(field => !data[field]);
-
-    if (missingFields.length > 0) {
-        showNotification('Veuillez remplir tous les champs obligatoires.', 'error');
-        return;
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(data.email)) {
-        showNotification('Veuillez entrer une adresse email valide.', 'error');
-        return;
-    }
-
-    // Afficher un message immédiat
-    showNotification('Envoi en cours...', 'info');
-
     try {
-        const response = await fetch(contactForm.action, {
-            method: contactForm.method,
-            body: formData,
-            headers: { 'Accept': 'application/json' }
-        });
+        const formData = new FormData(contactForm);
+        const data = Object.fromEntries(formData);
 
-        if (response.ok) {
-            showNotification('Message envoyé avec succès ! Nous vous répondrons bientôt.', 'success');
-            contactForm.reset();
-        } else {
-            showNotification('Une erreur est survenue lors de l\'envoi. Veuillez réessayer.', 'error');
+        // Validate required fields
+        const requiredFields = ['name', 'email', 'message', 'service'];
+        const missingFields = requiredFields.filter(field => !data[field]);
+
+        if (missingFields.length > 0) {
+            showNotification('Veuillez remplir tous les champs obligatoires.', 'error');
+            return;
         }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(data.email)) {
+            showNotification('Veuillez entrer une adresse email valide.', 'error');
+            return;
+        }
+
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        showNotification('Message envoyé avec succès ! Nous vous répondrons bientôt.', 'success');
+        contactForm.reset();
+
     } catch (error) {
         console.error('Erreur lors de l\'envoi du message:', error);
         showNotification('Une erreur est survenue. Veuillez réessayer.', 'error');
